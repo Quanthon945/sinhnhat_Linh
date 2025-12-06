@@ -3,107 +3,53 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Happy Birthday - Surprise Version</title>
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet">
+<title>Happy Birthday - Audio Fix</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Nunito:wght@900&family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-/* ==========================
-   STYLE CƠ BẢN
-   ========================== */
+/* STYLE GIỮ NGUYÊN NHƯ CŨ */
 :root { --primary: #ff4da6; --secondary: #4de0ff; --glass: rgba(255,255,255,0.1); }
-html,body{ margin:0; padding:0; width:100%; height:100%; font-family:'Segoe UI', sans-serif; background:#111325; color:white; overflow:hidden; transition: background 1s ease; }
+html,body{ margin:0; padding:0; width:100%; height:100%; font-family:'Segoe UI', sans-serif; background:#111325; color:white; overflow-x:hidden; transition: background 1s ease; }
+body.party-mode { background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab); background-size: 400% 400%; animation: gradientBG 15s ease infinite; }
+@keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-/* NỀN PARTY (Kích hoạt sau khi bấm nút) */
-body.party-mode {
-    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-    background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
-}
-@keyframes gradientBG {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-/* --- 1. MÀN HÌNH THỔI NẾN (Overlay) --- */
-#introOverlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: #000; z-index: 999;
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
-    transition: opacity 1.5s ease;
-}
-.candle-container { position: relative; cursor: pointer; transition: transform 0.2s; }
+#introOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1.5s ease; }
+.candle-container { position: relative; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: transform 0.2s; }
 .candle-container:active { transform: scale(0.95); }
-.candle {
-    width: 35px; height: 100px; background: linear-gradient(#ffcccb, #ff4da6);
-    border-radius: 5px; box-shadow: inset -5px -5px 10px rgba(0,0,0,0.2); margin: 0 auto;
-}
-.wick { width: 4px; height: 10px; background: #333; margin: 0 auto; position: relative; top: -5px; }
-.flame {
-    width: 15px; height: 35px; background: radial-gradient(white, gold, orange, red);
-    border-radius: 50% 50% 20% 20%; margin: -45px auto 0;
-    animation: burn 0.1s infinite alternate;
-    box-shadow: 0 0 15px orange; transition: opacity 0.5s; transform-origin: center bottom;
-}
-.smoke {
-    width: 5px; height: 50px; background: rgba(255,255,255,0.5);
-    position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
-    border-radius: 10px; filter: blur(3px); opacity: 0; transition: opacity 1s, top 2s;
-}
-.guide-text { margin-top: 30px; color: #888; font-size: 0.9rem; animation: fadeText 2s infinite; }
+.candle-number { font-family: 'Nunito', sans-serif; font-size: 100px; font-weight: 900; line-height: 1; color: transparent; background: linear-gradient(to bottom, #ffcccb 20%, #ff4da6 80%); -webkit-background-clip: text; background-clip: text; -webkit-text-stroke: 2px white; text-shadow: 0 0 20px rgba(255, 77, 166, 0.4); position: relative; z-index: 10; }
+.wick { width: 4px; height: 12px; background: #555; border-radius: 2px; margin-bottom: -5px; z-index: 9; }
+.flame { width: 20px; height: 40px; background: radial-gradient(ellipse at bottom, white 0%, gold 30%, orange 60%, red 90%); border-radius: 50% 50% 20% 20%; margin-bottom: -5px; animation: burn 0.1s infinite alternate; box-shadow: 0 0 20px orange; transition: opacity 0.5s; transform-origin: center bottom; z-index: 11; }
+.smoke { width: 6px; height: 50px; background: rgba(255,255,255,0.6); position: absolute; top: -50px; left: 50%; transform: translateX(-50%); border-radius: 10px; filter: blur(5px); opacity: 0; transition: opacity 1s, top 2s; pointer-events: none; }
+.guide-text { margin-top: 30px; color: #888; font-size: 0.9rem; animation: fadeText 2s infinite; text-align: center; padding: 0 20px; }
 @keyframes burn { 0% { transform: scale(1) rotate(-2deg); } 100% { transform: scale(1.1) rotate(2deg); } }
 @keyframes fadeText { 0%,100%{opacity:0.5} 50%{opacity:1} }
 
-/* --- 2. GIAO DIỆN CHÍNH --- */
-.app { opacity: 0; transition: opacity 2s ease; width:100%; height:100%; display:flex; justify-content:center; align-items:center; padding:20px; position: relative; z-index: 10; }
-.wrap { width:900px; max-width:100%; display:grid; grid-template-columns:300px 1fr; gap:20px; align-items:center; }
-@media(max-width:800px){ .wrap{grid-template-columns:1fr; display:block; height: auto; overflow-y: auto;} }
-
+.app { opacity: 0; transition: opacity 2s ease; width:100%; min-height:100vh; display:flex; justify-content:center; align-items:center; padding:20px; box-sizing: border-box; }
+.wrap { width: 900px; max-width: 100%; display: grid; grid-template-columns: 300px 1fr; gap: 20px; align-items: center; }
 .card { background:var(--glass); border:1px solid rgba(255,255,255,0.2); border-radius:18px; padding:20px; text-align:center; backdrop-filter: blur(10px); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); }
 .avatar { width:140px; height:140px; border-radius:50%; border:4px solid rgba(255,255,255,0.3); object-fit:cover; margin-bottom: 10px; transition: transform 0.5s; }
 .avatar:hover { transform: rotate(10deg) scale(1.05); }
-
-/* KHUNG NỘI DUNG PHẢI (Chứa Video hoặc Lời chúc) */
 .content-box { min-height: 350px; display: flex; align-items: center; justify-content: center; position: relative; }
-
-/* Video Frame */
 .video-frame { width:100%; border-radius:10px; overflow:hidden; border:2px solid rgba(255,255,255,0.3); background:black; box-shadow: 0 10px 20px rgba(0,0,0,0.3); animation: zoomIn 1s; }
 video { width:100%; display:block; max-height:400px; }
-
-/* Lời chúc Frame (Ẩn lúc đầu) */
-.wishes-frame { 
-    display: none; 
-    width: 100%; 
-    padding: 20px; 
-    background: rgba(255, 255, 255, 0.15); 
-    border-radius: 15px; 
-    border: 2px dashed rgba(255, 255, 255, 0.5);
-    animation: popUp 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-}
-.wish-title { font-size: 2rem; color: #ffe600; margin-bottom: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-#typewriterText { 
-    font-family: 'Dancing Script', cursive; /* Font viết tay */
-    font-size: 1.8rem; 
-    line-height: 1.6; 
-    color: #fff; 
-}
-
-/* Nút Bấm */
-.btn { 
-    padding:12px 30px; border-radius:30px; cursor:pointer; 
-    background:linear-gradient(45deg, #ff9a9e, #fad0c4); 
-    border:none; color:#d63384; font-weight:bold; margin-top:15px; 
-    box-shadow: 0 5px 15px rgba(255, 77, 166, 0.4); 
-    transition: transform 0.2s;
-}
+.wishes-frame { display: none; width: 100%; padding: 20px; background: rgba(255, 255, 255, 0.15); border-radius: 15px; border: 2px dashed rgba(255, 255, 255, 0.5); animation: popUp 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55); box-sizing: border-box; }
+.wish-title { font-size: 1.8rem; color: #ffe600; margin-bottom: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+#typewriterText { font-family: 'Dancing Script', cursive; font-size: 1.5rem; line-height: 1.6; color: #fff; text-align: left; }
+.btn { padding:12px 30px; border-radius:30px; cursor:pointer; background:linear-gradient(45deg, #ff9a9e, #fad0c4); border:none; color:#d63384; font-weight:bold; margin-top:15px; box-shadow: 0 5px 15px rgba(255, 77, 166, 0.4); transition: transform 0.2s; font-size: 1rem; }
 .btn:hover { transform: scale(1.1); background: white; }
 
-/* Hiệu ứng Animation */
+@media(max-width: 768px) {
+    .wrap { display: flex; flex-direction: column; gap: 15px; }
+    .candle-number { font-size: 80px; }
+    .avatar { width: 120px; height: 120px; }
+    .card { padding: 15px; }
+    .content-box { min-height: auto; }
+}
+
 @keyframes zoomIn { from{transform:scale(0.8); opacity:0} to{transform:scale(1); opacity:1} }
 @keyframes popUp { 0%{transform:scale(0);} 80%{transform:scale(1.1);} 100%{transform:scale(1);} }
 .particle { position: fixed; pointer-events: none; animation: floatUp linear forwards; }
 @keyframes floatUp { to { transform: translateY(-120vh) rotate(360deg); opacity: 0; } }
-
 </style>
 </head>
 <body>
@@ -113,9 +59,9 @@ video { width:100%; display:block; max-height:400px; }
         <div class="smoke"></div>
         <div class="flame" id="flame"></div>
         <div class="wick"></div>
-        <div class="candle"></div>
+        <div class="candle-number">21</div>
     </div>
-    <div class="guide-text">Ước trước khi chạm vào thổi tắt nến nha 🎂</div>
+    <div class="guide-text">Chạm vào nến để thổi tắt & nhận quà 🎂</div>
 </div>
 
 <div class="app" id="mainApp">
@@ -124,25 +70,23 @@ video { width:100%; display:block; max-height:400px; }
     <section class="card">
       <img id="avatar" class="avatar" src="">
       <h2 style="color:#ffcc00; margin:0; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Happy Birthday</h2>
-      <h3 id="nameDisplay" style="margin:5px 0 20px 0; font-size: 1.5rem;">TÊN BẠN</h3>
+      <h3 id="nameDisplay" style="margin:5px 0 10px 0; font-size: 1.5rem;">TÊN BẠN</h3>
       
       <button class="btn" id="btnOpen">💌 Gửi lời chúc</button>
     </section>
 
     <section class="card content-box">
-        
         <div class="video-frame" id="videoContainer">
             <video id="giftVideo" controls playsinline>
                 <source id="videoSource" src="" type="video/mp4">
             </video>
-            <p style="margin:10px 0; font-size:0.9rem; color:#ccc;">Video xinh đẹp ❤️</p>
+            <p style="margin:10px 0; font-size:0.9rem; color:#ccc;">Video kỷ niệm ❤️</p>
         </div>
 
         <div class="wishes-frame" id="wishesContainer">
             <div class="wish-title">🎉 Chúc mừng sinh nhật! 🎉</div>
             <div id="typewriterText"></div>
         </div>
-
     </section>
 
   </div>
@@ -155,16 +99,14 @@ video { width:100%; display:block; max-height:400px; }
    CẤU HÌNH (SỬA Ở ĐÂY)
    ========================== */
 const CONFIG = {
-  NAME: "Trương Linh", // Tên hiển thị
-  AVATAR: "./anh.jpg", // Link ảnh đại diện
-  MUSIC: "./nhac.mp3",    // Link nhạc nền
-  VIDEO: "./video.mp4",   // Link video
-  
-  // Lời chúc (Dùng \n để xuống dòng)
-  WISHES: "Chúc Pạn Linh tuổi mới \nthật nhiều sức khỏe và tràn đầy hạnh phúc! \nNgày càng xinh đẹp, cười nhiều hơn khóc! \nThuận buồm xuôi gió, gặp nhiều may mắn! \nChúc bạn tất cả! ❤️🎂✨"
+  NAME: "Trương Linh",
+  AVATAR: "./anh.jpg",    // LƯU Ý: Tên file phải CHÍNH XÁC (cả chữ hoa/thường)
+  MUSIC: "./nhac.mp3",    // LƯU Ý: Tên file phải CHÍNH XÁC
+  VIDEO: "./video.mp4",   // LƯU Ý: Tên file phải CHÍNH XÁC
+  WISHES: "Chúc Pạn Linh sinh nhật vui vẻ 🤗 \nTuổi mới thật nhiều sức khỏe và tràn đầy hạnh phúc! \nNgày càng xinh đẹp, cười nhiều hơn khóc! \nThuận buồm xuôi gió, gặp nhiều may mắn! \nHappy Birthday Chương Ninh 😁! ❤️🎂🎉"
 };
 
-// Gán dữ liệu ban đầu
+// Setup
 document.getElementById("avatar").src = CONFIG.AVATAR;
 document.getElementById("nameDisplay").innerText = CONFIG.NAME;
 document.getElementById("videoSource").src = CONFIG.VIDEO;
@@ -172,61 +114,56 @@ document.getElementById("giftVideo").load();
 const audio = document.getElementById("bgAudio");
 audio.src = CONFIG.MUSIC;
 
-/* ==========================
-   1. XỬ LÝ THỔI NẾN
-   ========================== */
+// --- THỦ THUẬT UNLOCK AUDIO (QUAN TRỌNG) ---
+// Chạm lần đầu tiên vào màn hình sẽ "mở khóa" âm thanh ngay lập tức
+document.body.addEventListener('click', function() {
+    if (audio.paused) {
+        audio.play().then(() => {
+            audio.pause(); // Phát rồi tắt ngay để "mồi" trình duyệt
+            audio.currentTime = 0;
+        }).catch(() => {});
+    }
+}, { once: true });
+
+
+// 1. THỔI NẾN (Chỉ phát Video)
 let isBlown = false;
 function blowCandle() {
     if (isBlown) return;
     isBlown = true;
 
-    // Tắt nến
     document.getElementById("flame").style.opacity = 0;
     document.querySelector(".smoke").style.opacity = 1;
-    document.querySelector(".smoke").style.top = "-100px";
-    document.querySelector(".guide-text").innerText = "Chúc điều ước của bạn thành hiện thực...";
+    document.querySelector(".smoke").style.top = "-60px";
+    document.querySelector(".guide-text").innerText = "Điều ước đã được gửi đi! ✨";
 
-    // Vào màn hình chính
     setTimeout(() => {
         document.getElementById("introOverlay").style.opacity = 0;
         setTimeout(() => document.getElementById("introOverlay").style.display = "none", 1000);
-        
-        // Hiện Main App & Phát Video
         document.getElementById("mainApp").style.opacity = 1;
-        audio.play().catch(() => {});
-        audio.volume = 0.6;
         document.getElementById("giftVideo").play().catch(() => {});
     }, 1500);
 }
 
-/* ==========================
-   2. BẤM NÚT -> ĐỔI BACKGROUND & HIỆN LỜI CHÚC
-   ========================== */
+// 2. BẤM NÚT (Phát nhạc THẬT)
 document.getElementById("btnOpen").onclick = () => {
-    // A. Ẩn Video
-    const videoContainer = document.getElementById("videoContainer");
-    const videoPlayer = document.getElementById("giftVideo");
-    videoContainer.style.display = "none";
-    videoPlayer.pause(); // Dừng video
+    document.getElementById("videoContainer").style.display = "none";
+    document.getElementById("giftVideo").pause();
 
-    // B. Hiện Lời chúc
-    const wishesContainer = document.getElementById("wishesContainer");
-    wishesContainer.style.display = "block";
+    // Phát nhạc
+    audio.play().catch((e) => { 
+        // Nếu vẫn lỗi thì báo cụ thể
+        alert("Không thể phát nhạc: " + e.message + "\nKiểm tra lại tên file nhạc nhé!"); 
+    });
+    audio.volume = 0.6;
 
-    // C. Đổi Background sang chế độ Party
+    document.getElementById("wishesContainer").style.display = "block";
     document.body.classList.add("party-mode");
-
-    // D. Chạy chữ typewriter
     typeWriter(CONFIG.WISHES, "typewriterText", 70);
-
-    // E. Ẩn nút bấm
     document.getElementById("btnOpen").style.display = "none";
-
-    // F. Bắn hiệu ứng tưng bừng
     startPartyEffects();
 };
 
-// Hàm chạy chữ
 function typeWriter(text, elementId, speed) {
     let i = 0;
     const element = document.getElementById(elementId);
@@ -242,13 +179,12 @@ function typeWriter(text, elementId, speed) {
     type();
 }
 
-// Hàm hiệu ứng Party (Nhiều icon hơn)
 function startPartyEffects() {
-    const icons = ['❤️', '✨', '🎂', '🎁', '🎉'];
+    const icons = ['❤️', '✨', '🎂', '🎁', '🎉', '21']; 
     setInterval(() => {
         const icon = icons[Math.floor(Math.random() * icons.length)];
         createParticle(icon);
-    }, 200); // Bắn nhanh hơn
+    }, 200);
 }
 
 function createParticle(char) {
@@ -257,12 +193,11 @@ function createParticle(char) {
     p.className = 'particle';
     p.style.left = Math.random() * 95 + 'vw';
     p.style.top = '100vh';
-    p.style.fontSize = (Math.random() * 20 + 20) + 'px'; // Icon to hơn
+    p.style.fontSize = (Math.random() * 20 + 20) + 'px';
     p.style.animationDuration = (Math.random() * 3 + 3) + 's'; 
     document.body.appendChild(p);
     setTimeout(() => p.remove(), 6000);
 }
-
 </script>
 </body>
 </html>
